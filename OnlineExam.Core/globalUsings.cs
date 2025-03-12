@@ -6,7 +6,6 @@ global using Microsoft.IdentityModel.Tokens;
 global using OnlineExam.Core.Constants;
 global using OnlineExam.Core.Dtos.Pagination;
 global using OnlineExam.Core.IRepositories.Generic;
-global using OnlineExam.Core.IRepositories.Non_Generic;
 global using OnlineExam.Core.ViewModels.Auth.Requests;
 global using OnlineExam.Core.ViewModels.Exam.Request;
 global using OnlineExam.Core.ViewModels.Exam.Response;
