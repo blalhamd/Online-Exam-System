@@ -1,0 +1,15 @@
+﻿namespace OnlineExam.Core.ViewModels.Exam.Response
+{
+    public class ScoreViewModel
+    {
+        public double Score { get; set; }
+        public double ScoreInPercentage { get; set; }
+        public double TotalGrade {  get; set; }
+
+        public int NumberQuestions { get; set; }
+        public int NumberWrongQuestions { get; set; }
+        public int NumberCorrectQuestions { get; set; }
+
+        public List<AnsweredQuestionViewModel> AnsweredQuestions { get; set; } = new();
+    }
+}

@@ -1,0 +1,51 @@
+﻿@model CreateTrueOrFalseQuestion
+
+@{
+    ViewData["Title"] = "Edit True/False Question";
+}
+
+<h2>Edit True/False Question</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+
+<form asp-controller="Exams" asp-action="EditTrueFalseQuestion" asp-route-examId="@Model.ExamId" asp-route-questionId="@ViewBag.QuestionId" method="post">
+    <input type="hidden" asp-for="ExamId" />
+
+    <div class="form-group">
+        <label asp-for="Title">Question Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="GradeOfQuestion">Grade</label>
+        <input asp-for="GradeOfQuestion" class="form-control" type="number" step="0.1" />
+        <span asp-validation-for="GradeOfQuestion" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CorrectValue">Correct Answer</label>
+        <div>
+            <label class="mr-3">
+                <input type="radio" name="CorrectValue" value="true" @(Model.CorrectValue ? "checked" : "") /> True
+            </label>
+            <label>
+                <input type="radio" name="CorrectValue" value="false" @(Model.CorrectValue ? "" : "checked") /> False
+            </label>
+        </div>
+        <span asp-validation-for="CorrectValue" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-action="Details" asp-route-examId="@Model.ExamId" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,50 @@
+﻿@model PaginatedResponse<ExamViewModel>
+
+@inject IAuthorizationService AuthorizationService
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="text-center mt-3">Available Exams</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Subject</th>
+            <th>Level</th>
+            <th>Total Grade</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var exam in Model.Data)
+        {
+            <tr>
+                <td>@exam.SubjectName</td>
+                <td>@exam.Level</td>
+                <td>@exam.TotalGrade</td>
+                <td>@(exam.Status ? "Active" : "Inactive")</td>
+                <td>
+                    <a href="@Url.Action("GetExamWithQuestions", "Users", new { examId = exam.Id })" class="btn btn-info btn-sm">Take Exam</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("GetExams", "Exams", new { pageNumber = i, pageSize = Model.PageSize })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+

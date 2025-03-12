@@ -1,0 +1,63 @@
+﻿@model LoginRequest
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-controller="Authentication" asp-action="Login" method="post">
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group position-relative">
+        <label asp-for="Password"></label>
+        <div class="input-group">
+            <input asp-for="Password" type="password" id="passwordField" class="form-control" />
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                <i class="fas fa-eye"></i>
+            </button>
+        </div>
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <!-- Remember Me Checkbox -->
+    <div class="form-check my-2">
+        <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="rememberMeCheck">
+        <label class="form-check-label" for="rememberMeCheck">Remember Me</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary my-3 d-block ms-auto">Login</button>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+
+    <script>
+        // Show/Hide Password
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            let passwordField = document.getElementById("passwordField");
+            let icon = this.querySelector("i");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+
+        // Remember Me Validation
+        $(document).ready(function () {
+            $("form").validate(); // Apply validation
+        });
+    </script>
+}

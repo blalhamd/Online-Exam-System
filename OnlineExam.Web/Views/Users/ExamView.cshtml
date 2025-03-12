@@ -1,0 +1,88 @@
+﻿@model ExamWithQuestionViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Take Exam";
+    var exam = Model.Exam;
+    var attemptId = Model.AttemptId;
+    var indexCounter = 0; // Global index to track all questions
+}
+
+<div class="container mt-4">
+     <h2 class="text-center">@exam.SubjectName - Exam</h2>
+     <p class="text-muted text-center">@exam.Description</p>
+
+    <form id="examForm" method="post" asp-action="SubmitExam" asp-controller="Users" asp-route-examAttemptId="@attemptId">
+        <input type="hidden" name="examAttemptId" value="@attemptId" />
+
+        <!-- ✅ Choose Questions -->
+        @if (exam.ChooseQuestions is not null)
+        {
+
+            @foreach (var question in exam.ChooseQuestions)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>@question.Title</h5>
+                        <input type="hidden" name="Answers[@indexCounter].QuestionId" value="@question.Id" />
+
+                        <p>@question.Title (Choices Count: @question.Choices.Count)</p>
+
+                        @for (var j = 0; j < question.Choices.Count; j++)
+                        {
+                            var choice = question.Choices[j];
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input"
+                                       name="Answers[@indexCounter].SelectedChoiceId"
+                                       value="@choice.Id" required>
+                                <label class="form-check-label">@choice.Text</label>
+                            </div>
+                        }
+                    </div>
+                </div>
+                indexCounter++; // ✅ Increment index after each ChooseQuestion
+            }
+        }
+
+        <!-- ✅ True/False Questions -->
+        @if (exam.TrueOrFalseQuestions is not null)
+        {
+            @foreach (var question in exam.TrueOrFalseQuestions)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>@question.Title</h5>
+                        <input type="hidden" name="Answers[@indexCounter].QuestionId" value="@question.Id" />
+
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input"
+                                   name="Answers[@indexCounter].SelectedChoiceId"
+                                   value="1" required>
+                            <label class="form-check-label">True</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" class="form-check-input"
+                                   name="Answers[@indexCounter].SelectedChoiceId"
+                                   value="2" required>
+                            <label class="form-check-label">False</label>
+                        </div>
+                    </div>
+                </div>
+                indexCounter++; // ✅ Increment index after each True/False question
+            }
+        }
+
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-primary px-5">Submit Exam</button>
+        </div>
+    </form>
+
+</div>
+
+<script>
+    document.getElementById("examForm").addEventListener("submit", function(event) {
+        if (!confirm("Are you sure you want to submit the exam?")) {
+            event.preventDefault();
+        }
+    });
+</script>

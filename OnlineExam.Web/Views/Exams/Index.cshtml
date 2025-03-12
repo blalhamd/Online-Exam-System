@@ -1,0 +1,64 @@
+﻿@model PaginatedResponse<ExamViewModel>
+
+@inject IAuthorizationService AuthorizationService
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Manage Exams";
+}
+
+<h2 class="text-center mt-3">Exam Management</h2>
+
+@if ((await AuthorizationService.AuthorizeAsync(User, "AdminOnly")).Succeeded)
+{
+    <div class="text-end mb-3">
+        <a href="@Url.Action("Create", "Exams")" class="btn btn-success">Create New Exam</a>
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Subject</th>
+            <th>Level</th>
+            <th>Total Grade</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var exam in Model.Data)
+        {
+            <tr>
+                <td>@exam.SubjectName</td>
+                <td>@exam.Level</td>
+                <td>@exam.TotalGrade</td>
+                <td>@(exam.Status ? "Active" : "Inactive")</td>
+                <td>
+                    <a href="@Url.Action("Details", "Exams", new { examId = exam.SubjectId })" class="btn btn-info btn-sm">View</a>
+
+                    @if ((await AuthorizationService.AuthorizeAsync(User, "AdminOnly")).Succeeded)
+                    {
+                        <a href="@Url.Action("EditExamForm", "Exams", new { examId = exam.SubjectId })" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="@Url.Action("Delete", "Exams", new { examId = exam.SubjectId })" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination -->
+<div class="d-flex justify-content-center">
+    <nav>
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.CurrentPage == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("GetExams", "Exams", new { pageNumber = i, pageSize = Model.PageSize })">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+

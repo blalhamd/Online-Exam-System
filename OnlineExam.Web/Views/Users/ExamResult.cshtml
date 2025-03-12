@@ -1,0 +1,43 @@
+﻿@model ScoreViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Exam Results";
+}
+
+<div class="container mt-5 text-center">
+    <h2 class="text-success">Exam Submitted Successfully!</h2>
+    <p class="mt-3 fs-5">Number Of Questions: <strong>@Model.NumberQuestions</strong> </p>
+    <p class="mt-3 fs-5">Correct Answers: <strong>@Model.NumberCorrectQuestions</strong> </p>
+    <p class="mt-3 fs-5">Wrong Answers: <strong>@Model.NumberWrongQuestions</strong> </p>
+    <p class="mt-3 fs-5">Your Score: <strong>@Model.Score</strong> / @Model.TotalGrade</p>
+    <p class="mt-3 fs-5">Score Percentage: <strong>@Model.ScoreInPercentage.ToString("F2")</strong> %</p>
+
+    <div class="mt-4">
+        <h3>Answered Questions</h3>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Grade</th>
+                    <th>Result</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var question in Model.AnsweredQuestions)
+                {
+                    <tr class="@(question.IsCorrect ? "table-success" : "table-danger")">
+                        <td>@question.Title</td>
+                        <td>@question.GradeOfQuestion</td>
+                        <td>@(question.IsCorrect ? "✅ Correct" : "❌ Incorrect")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-secondary px-4">Return to Home</a>
+    </div>
+</div>
+
